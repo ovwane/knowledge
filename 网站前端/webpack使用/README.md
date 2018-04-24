@@ -8,7 +8,7 @@
 
     >```javascript
     >import list from './list';
-    >//等价于
+    >// 等价于：
     >var list = require('./list');
     >```
 2. 所有文件都当作是**模块（module）**：`脚本（js、jsx、tsx、coffee）`、`样式（css、scss、sass、less）`、`模版（html、tpl）`、`JSON`、`图片`、`字体`。

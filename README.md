@@ -25,7 +25,7 @@
 
         1. [JS实用方法](./网站前端/JS方法积累/实用方法/README.md)
         2. [JS算法小结](./网站前端/JS方法积累/算法小结/README.md)
-    3. [JS正则表达式](./网站前端/JS正则表达式/README.md)
+    >[JS正则表达式](./网站前端/JS正则表达式/README.md)
 2. HTML+CSS
 
     1. [HTML+CSS学习笔记](./网站前端/HTML+CSS学习笔记/README.md)
@@ -42,7 +42,7 @@
 
     1. [前端概念](./网站前端/前端内容/README.md)
     2. [标准库文档](./网站前端/前端内容/标准库文档.md)
-    3. [基础知识](./网站前端/前端内容/基础知识.md)
+    >[基础知识](./网站前端/前端内容/基础知识.md)
 4. [HTTP相关](./网站前端/HTTP相关/README.md)
 5. [Vue.js学习笔记](./网站前端/Vue.js学习笔记/README.md)
 6. [Node.js学习笔记](./网站前端/Node.js学习笔记/README.md)
@@ -85,7 +85,7 @@
 
    <summary><a href="./工具使用/IDEs设置/README.md">IDEs设置</a></summary>
 
-    1. [phpstorm.jar](./工具使用/IDEs设置/phpstorm_04.16.jar)
+    1. [phpstorm.jar](./工具使用/IDEs设置/phpstorm_05.18.jar)
     2. [webstorm.jar](./工具使用/IDEs设置/webstorm_08.22.jar)
     </details>
 4. [Charles使用](./工具使用/Charles使用/README.md)

@@ -139,18 +139,18 @@
 1. request：
 
     ```http
-    <method> <request-URI> <version>        //请求行
-    <headers>                               //请求头
-                                            //空行（CR+LF）
-    <entity-body>                           //请求消息主体
+    <method> <request-URI> <version>        // 请求行
+    <headers>                               // 请求头
+                                            // 空行（CR+LF）
+    <entity-body>                           // 请求消息主体
     ```
 2. response：
 
     ```http
-    <version> <status code> <reason phrase> //状态行
-    <headers>                               //响应头
-                                            //空行（CR+LF）
-    <entity-body>                           //响应正文
+    <version> <status code> <reason phrase> // 状态行
+    <headers>                               // 响应头
+                                            // 空行（CR+LF）
+    <entity-body>                           // 响应正文
     ```
 
 ><details>
@@ -269,7 +269,7 @@
         服务器已接受请求，但尚未处理。正如它可能被拒绝一样，最终该请求可能会也可能不会被执行。在异步操作的场合下，没有比发送这个状态码更方便的做法了。
     4. 203 Non-Authoritative Information
 
-        服务器已成功处理了请求，但返回的实体头部元信息不是在原始服务器上有效的确定集合，而是来自本地或第三方的拷贝。当前的信息可能是原始版本的子集或超集。
+        服务器已成功处理了请求，但返回的实体头部元信息不是在原始服务器上有效的确定集合，而是来自本地或第三方的复制。当前的信息可能是原始版本的子集或超集。
     5. **204 No Content**
 
         服务器成功处理了请求，但不需要返回任何实体内容，并且希望返回更新了的元信息。响应可能通过实体头部的形式，返回新的或更新后的元信息。如果存在这些头部信息，则应当与所请求的变量相呼应。始终以消息头后的第一个空行结尾。
@@ -740,7 +740,7 @@
 
     >ie10+支持。
 
-    现代浏览器一旦发现`XMLHttpRequest`或`fetch`或其他方式请求跨源，会自动添加一些附加的头信息（如`Origin`），有时还会多出一次附加的请求（非简单请求的`OPTIONS`请求）。
+    现代浏览器一旦发现`XMLHttpRequest`或`fetch`等请求跨源，会自动添加一些附加的头信息（如`Origin`），有时还会多出一次附加的请求（非简单请求的`OPTIONS`请求）。
 
 ><details>
 ><summary>简单/非简单请求区分</summary>

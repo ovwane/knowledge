@@ -84,7 +84,7 @@
                     >
                     >```html
                     ><style>
-                    >    /* 权重相同，仅取决于样式顺序*/
+                    >    /* 权重相同，仅取决于样式顺序 */
                     >    .a p {color: red;}
                     >    .b p {color: blue;}
                     ></style>
@@ -401,8 +401,8 @@
     >    font-size: 10px;
     >}
     >.son {
-    >    font-size: 2em; /*20px：继承的font-size * 2*/
-    >    padding: 2em;   /*40px：自己的font-size * 2*/
+    >    font-size: 2em; /* 20px：继承的font-size * 2 */
+    >    padding: 2em;   /* 40px：自己的font-size * 2 */
     >}
     >```
     ></details>
@@ -481,11 +481,11 @@
 3. `<img>`没有`src`属性或`src`属性为空隐藏
 
     ```css
-    img[src=""] {   /* ie8+*/
-        visibility: hidden; /* 属性为空隐藏*/
+    img[src=""] {   /* ie8+ */
+        visibility: hidden; /* 属性为空隐藏 */
     }
-    img:not([src]) {    /* ie9+*/
-        visibility: hidden; /* 属性不存在隐藏*/
+    img:not([src]) {    /* ie9+ */
+        visibility: hidden; /* 属性不存在隐藏 */
     }
     ```
 
@@ -536,7 +536,7 @@
     >            @error "rem()的参数单位必须是px或不带单位";
     >        }
     >
-    >        //$base-font-size：切图时设计稿宽度对应的媒体查询中html的font-size
+    >        // $base-font-size：切图时设计稿宽度对应的媒体查询中html的font-size
     >        @return $px / $base-font-size + rem;
     >    }
     >    @function position-one($positon, $singleSize, $spritesSize) {
@@ -570,7 +570,7 @@
     >        background-size: rem(($width + $gap)*$x - $gap) rem(($height + $gap)*$y - $gap);
     >        background-repeat: no-repeat;
     >
-    >        //$i：横轴；$j：纵轴
+    >        // $i：横轴；$j：纵轴
     >        @for $j from 1 through $y {
     >            @for $i from 1 through $x {
     >                &.i-#{$j}-#{$i} {
@@ -810,7 +810,7 @@
                 display: flex;
                 justify-content: center;
             }
-            /* 或*/
+            /* 或 */
             .father {
                 display: flex;
 
@@ -845,15 +845,15 @@
         1. 父级`display: table-cell; vertical-align: middle;`，子级`display: inline-block;`。
 
             ```scss
-            .father { /* （为兼容低版本ie）不能是float或absolute，可以在外嵌套float或absolute*/
+            .father { /* （为兼容低版本ie）不能是float或absolute，可以在外嵌套float或absolute */
                 display: table-cell;
                 vertical-align: middle;
 
-                /* ie6/7需要：height/font-size = 1.14*/
+                /* ie6/7需要：height/font-size = 1.14 */
                 *height: 114px;
                 *font-size: 100px;
 
-                .son {  /* （为兼容低版本ie）必须是内联元素*/
+                .son {  /* （为兼容低版本ie）必须是内联元素 */
                     display: inline-block;
                     *display: inline;
                     *zoom: 1;
@@ -957,7 +957,7 @@
                 text-align: center;
                 vertical-align: middle;
 
-                /* ie6/7需要：height/font-size = 1.14*/
+                /* ie6/7需要：height/font-size = 1.14 */
                 *height: 114px;
                 *font-size: 100px;
 
@@ -1222,16 +1222,16 @@
             ><summary>e.g.</summary>
             >
             >```javascript
-            >/* bad：强制同步布局，可能产生布局抖动*/
+            >/* bad：强制同步布局，可能产生布局抖动 */
             >dom.forEach(function (elem) {
-            >    if (window.scrollY < 200) { //计算读取layout
-            >        elem.style.opacity = 0.5;   //JS写入样式
+            >    if (window.scrollY < 200) { // 计算读取layout
+            >        elem.style.opacity = 0.5;   // JS写入样式
             >    }
             >});
             >
-            >/* good：先读后写*/
-            >if (window.scrollY < 200) { //计算读取layout
-            >    /* 批量JS写入样式*/
+            >/* good：先读后写 */
+            >if (window.scrollY < 200) { // 计算读取layout
+            >    /* 批量JS写入样式 */
             >    dom.forEach(function (elem) {
             >        elem.style.opacity = 0.5;
             >    });
@@ -1372,17 +1372,45 @@
 10. 单选`<input type="radio">`、多选`<input type="checkbox">`按钮开关自定义样式：
 
     用`input:checked + 兄弟节点`操作选项选中与否的不同样式；可以隐藏`<input>`，点击在`<label>`上改变`<input>`的`:checked`状态（`<label>`的`for`绑定`<input>`的`id`），用自定义样式来制作单选框、复选框。避免使用JS。
-11. Android2.3出现渲染问题可以在渲染错误的节点上添加`position: relative;`（类似ie6的haslayout）。
-12. 避免：
+11. 输入框仅输入数字的：
+
+    1. `<input type="number" pattern="[0-9]*" onchange="处理函数">`
+    2. <details>
+    
+        <summary>处理函数（jQuery）</summary>
+        
+        ```javascript
+        $(输入框).on('change', function () {
+            const $this = $(this);
+            let val = $this.val();
+
+            val = parseFloat(val.split('.').slice(0, 2).join('.'));  // 去除多余的小数点（type="text"才有用）
+
+            if (Number.isNaN(val)) {    // 去除无效输入
+                val = 默认值;
+            } else {    // 处理最小最大值
+                val = Math.max(Math.min(val, 最大值), 最小值);
+            }
+
+            if (val.toString().split('.')[1] && val.toString().split('.')[1].length > 小数位数) {  // 保留小数位数
+                val = val.toFixed(小数位数);
+            }
+
+            $this.val(val);
+        });
+        ```
+        </details>
+12. Android2.3出现渲染问题可以在渲染错误的节点上添加`position: relative;`（类似ie6的haslayout）。
+13. 避免：
 
     1. 避免~~放大、缩小图片~~，使用原始大小展现。
     2. 避免使用不可缓存且增加额外HTTP请求的 ~~<iframe>~~。
-13. 富文本：
+14. 富文本：
 
     1. 富文本内容除了要检测用户输入标签的闭合性，还要注意不要用`<li>`嵌套富文本，因为代码中如果有单独的`<li>`（没有嵌套`<ol>`或`<ul>`），就会“越级”到跟祖先级`<li>`同级的内容。
     2. 部分富文本会用`<em>`、`<ol>`、`<ul>`来表示**斜体**、**有序序列**、**无序序列**，因此如果用CSS重置了以上标签后，要在[富文本内重载开启它们的默认效果](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/初始化模板/cssReset.scss#L61-L77)。
     3. 部分富文本会在`<table>`上使用`cellspacing`、`border`、`bordercolor`属性设置表格，又因为设置了`border: 0;`的表格无法重载开启以上属性作用，所以CSS重置时[不要重置`table,tbody,tfoot,thead,tr,th,td`的`border`属性](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/初始化模板/cssReset.scss#L26-L27)。
-14. 超出内容区域的内容：
+15. 超出内容区域的内容：
 
     1. 用绝对定位把内容设置在外部
 

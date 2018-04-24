@@ -216,7 +216,7 @@ gulp.task('browserSync', () => {
     proxy: { // 服务器
       target: 'localhost/demo'
     }
-    //    server: {   //相对地址
+    //    server: {   // 相对地址
     //      baseDir: '../www/demo/',
     //      directory: true
     //    }
