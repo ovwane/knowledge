@@ -1,6 +1,6 @@
 # 命令行备忘
 
->- 学会在终端中进行命令查询：
+>- 学会在终端中进行命令查询
 >
 >    1. `命令 --help`
 >    2. `man 命令`
@@ -78,4 +78,15 @@
     ./文件名.sh
 
     . 路径名/文件名.sh
+    ```
+12. 开机自动运行的脚本（Unix-like）
+
+    ```bash
+    #macOS
+    vi ~/.bash_profile  # bash
+    vi ~/.zshrc         # zsh
+
+    # 比如可以把定义环境变量放在里面：export NODE_ENV=development
+
+    # source 脚本   # 当前运行一遍
     ```

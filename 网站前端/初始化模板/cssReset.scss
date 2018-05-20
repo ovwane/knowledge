@@ -39,7 +39,7 @@ button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusri
 [type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button {height:auto;}
 [type="search"] {-webkit-appearance:textfield;outline-offset:-2px;}
 [type="search"]::-webkit-search-cancel-button,[type="search"]::-webkit-search-decoration {-webkit-appearance:none;}
-body {word-wrap:break-word;}
+body {/*word-wrap:break-word;*/}
 
 /* -WAP端*/
 a {-webkit-text-decoration-skip:objects;}

@@ -1,10 +1,10 @@
-# gulp使用
+### gulp使用
 
 >gulp: stream building tools.
 
 1. <details>
 
-    <summary>Node's package for gulp(local): <a href="gulp/package.json">package.json</a></summary>
+    <summary>Node's package for gulp(local): <a href="./gulp/package.json">package.json</a></summary>
 
     1. `npm run gulp`
     2. `npm run gulp -- browserSync`

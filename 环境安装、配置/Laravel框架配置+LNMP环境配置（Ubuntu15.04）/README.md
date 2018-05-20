@@ -1,4 +1,4 @@
-# Laravel框架配置+LNMP环境配置（Ubuntu15.04）
+### Laravel框架配置+LNMP环境配置（Ubuntu15.04）
 
 1. 安装**Ubuntu Desktop**或**Ubuntu Server**
 
