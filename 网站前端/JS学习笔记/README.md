@@ -878,7 +878,7 @@
             }
 
             /* 公开的内容 */
-            this.para = _arr;   // 形参
+            this.para = _arr;
             this.para_1 = {b: '公开的变量para_1（每个实例不共享）'};
             this.func_1 = function () {
                 console.log('公开的业务逻辑func_1（每个实例不共享）');
@@ -910,7 +910,7 @@
                 }
 
                 /* 公开的内容 */
-                this.para = _arr;   // 形参
+                this.para = _arr;
                 this.para_1 = {b: '公开的变量para_1（每个实例不共享）'};
                 this.func_1 = function () {
                     console.log('公开的业务逻辑func_1（每个实例不共享）');
@@ -1310,7 +1310,8 @@
 5. 代码调试方式
 
     1. JS：`console.log`（`alert`）、`console.trace`
-    2. DevTool额外：Sources断点（`debugger`、配合SourceMap）
+    2. PC端的DevTool：Sources断点（`debugger`、配合SourceMap）
+    3. WAP端使用页面模拟调试，如[vConsole](https://github.com/Tencent/vConsole)、[eruda](https://github.com/liriliri/eruda)
 
 ### [函数防抖](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/JS方法积累/实用方法/README.md#原生js防抖函数)、[函数节流](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/JS方法积累/实用方法/README.md#原生js节流函数)
 >都是用来限制某个函数在一定时间内执行次数的技巧。
@@ -1369,7 +1370,7 @@
     >    // 匿名函数
     >    (function (para) {
     >        setTimeout(function () {
-    >            console.log(para);  // 结果是传入进匿名函数的形参
+    >            console.log(para);  // 结果是传入进匿名函数的参数
     >        }, 0);
     >    }(i));
     >}
@@ -1430,15 +1431,18 @@
 
         >1. 都是以**字符串**的形式交互。
         >2. iOS、Android的WebView无法判断是否安装了其他App。
+        >3. 可以通过`查看注入的全局方法`或`客户端调用回调函数`来判定H5页面是否在具体App内打开。
 
         1. 桥协议：Native注入全局方法至WebView的`window`，前端调用则触发Native行为。
 
             >1. 客户端注入方式：JS伪协议方式`javascript: 代码`。
             >2. 注入JS代码可以在创建WebView之前（native code）或之后（全局变量JS注入）。
+            >3. 若注入的方法为`undefined`，则认为不在此App内部。
         2. 自定义Scheme：拦截跳转（`<iframe>`设置`src`、点击`<a>`、`document.location.href`），触发Native行为。
 
             >1. 客户端可以捕获、拦截任何行为（如`console`、`alert`）。相对于注入全局变量，拦截方式可以隐藏具体JS业务代码，且不会被重载，方便针对不可控的环境。
             >2. 有些App会设置允许跳转的其他App的白名单或黑名单，如微信白名单。
+            >3. 除了增加回调函数且被客户端调用，否则无法判定是否在此App内部。
 
             1. iOS8-
 
@@ -1479,7 +1483,7 @@
                   }
                 }, 3000);
                 ```
-        3. iOS9+的Universal links（通用链接），可以从底层打开其他App客户端（跳过App的白名单，但还是可以用其他方式阻止通用链接打开App）
+        3. iOS9+的Universal links（通用链接），可以从底层打开其他App客户端，跳过白名单（微信已禁用）
 
             >需要HTTPS域名配置、iOS设置等其他端配合。
 
@@ -1520,7 +1524,7 @@
     <summary>等价于：</summary>
     
     ```javascript
-    /* 不是形参情况 */
+    /* 不是传参情况 */
     var a;
 
     if (a === 0 || a === "" || a === false || a === null || a === undefined) {
@@ -1528,7 +1532,7 @@
     }
 
 
-    /* 形参情况 */
+    /* 传参情况 */
     function func(b) {
         if (b === 0 || b === "" || b === false || b === null || b === undefined) {
             b = {};
@@ -2574,7 +2578,7 @@
             1. `arr = [];   // 不改变原始数组（新赋值一个空数组）`
             2. `arr.length = 0; // 改变原始数组`
             3. `arr.splice(0, arr.length);  // 改变原始数组`
-        2. 操作数组形参，不改变数组实参
+        2. 改变传入函数的数组，不改变数组实参
 
             1. 浅复制：
                 
@@ -2876,7 +2880,7 @@
                 2. `async-await`（只有`await`才是异步）
                 3. `Promise`（`Promise.then/catch/all/race`）
 
-                    >`new Promise`和`Prmise.resolve/reject`都是直接执行。
+                    >`new Promise`和`Prmise.resolve/reject`都是直接执行的同步任务。
                 4. `MutationObserver`
             >- macrotask和microtast选择
             >
@@ -2910,6 +2914,13 @@
 
     ![事件循环图](./images/event-loop-1.png)
 4. 由于异步函数是立刻返回，异步事务中发生的错误是无法通过`try-catch`来捕捉。
+5. JS的异步编程方式：
+
+    1. 回调函数
+    2. 事件监听（观察者模式）
+    3. Promise
+    4. Generator
+    5. async-await
 
 ### 定时器 && 重绘函数
 1. 定时器（`setInterval`、`setTimeout`）
