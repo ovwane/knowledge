@@ -1631,9 +1631,9 @@
         1. 自定义类型实例 -> `'[object Object]'`
         2. `undefined` 或 不填 -> `'[object Undefined]'`
         3. `null` -> `'[object Null]'`
-        4. `{}` -> `'[object Object]'`
-        5. `[]` -> `'[object Array]'`
-        6. `function(){}`（包括匿名函数） -> `'[object Function]'`
+        4. Object实例 -> `'[object Object]'`
+        5. Array实例 -> `'[object Array]'`
+        6. Function实例 -> `'[object Function]'`
         7. Number实例 -> `'[object Number]'`
         8. String实例 -> `'[object String]'`
         9. Boolean实例 -> `'[object Boolean]'`
@@ -2237,7 +2237,7 @@
 
         `var 名字 = function(多个参数) {/* 函数体 */};`
 
-        >命名函数表达式：`var 名字1 = function 名字2() {};`，其中函数名`名字2`只能在函数体内部使用。
+        >命名函数表达式：`var 名字 = function 内部名字 () {};`，其中函数名`内部名字`只能在函数体内部使用。
         >
         ><details>
         ><summary>e.g.</summary>
@@ -2425,11 +2425,13 @@
     
         1. 连接存在于**实例**与**构造函数的原型对象**之间，而不直接存在于~~实例与构造函数~~之间。
         2. 内置构造函数的原型上有各种方法和属性，实例对象通过原型链进行调用。
-    3. 每个引用数据类型都有`[[Prototype]]`属性，指向自己的构造函数的`prototype`。
+    3. 每个引用数据类型都有`[[Prototype]]`属性，指向`自己的构造函数.prototype`（原型对象）。
 
         >每个引用数据类型都显式或隐式由某个构造函数创建。
     4. 不断向上的`[[Prototype]]`属性，构成了原型链。
 
+        >访问一个引用类型的属性：若这个属性在对象自身中不存在，则向上查找其`[[Prototype]]`指向的对象；若依然找不到，则继续向上查找（其`[[Prototype]]`指向的对象的）`[[Prototype]]`指向的对象，直到原型终点。
+        
         原型链终点是`null`，倒数第二是`Object.prototype`。
 
     <details>
@@ -2439,13 +2441,19 @@
     var A = function () {};
     var a = new A();
 
-    console.log('原型与构造函数：', A.prototype.constructor === A);
-    console.log('实例与原型：', a.__proto__ === A.prototype);
-    console.log('实例与构造函数:', a.__proto__.constructor === A);
+    console.log('原型与构造函数：', A.prototype.constructor === A)
+    console.log('实例与原型：', a.__proto__ === A.prototype)
+    console.log('实例与构造函数:', a.__proto__.constructor === A)
 
+    /*
+     若a.constructor无定义，则向上查找a.__proto__.constructor；
+     若依然没有定义，则继续向上查找a.__proto__.__proto__.constructor；
+     ...
+     直到原型链终点。
+    */
 
-    console.log(a.__proto__.__proto__ === Object.prototype);
-    console.log(a.__proto__.__proto__.__proto__ === null);
+    console.log(a.__proto__.__proto__ === Object.prototype)
+    console.log(a.__proto__.__proto__.__proto__ === null)
     ```
     </details>
 2. 如果重写原型的值（不是添加），可以给原型添加`constructor`属性并指向**构造函数**
@@ -2472,28 +2480,60 @@
 ### 继承
 1. 继承原理
 
-    1. 在子类构造函数体内调用父类构造函数。
-    2. **将一个构造函数的实例（父类）赋值给另一个构造函数的原型（子类）**。
+    1. 子类继承父类属性：在子类构造函数体内调用父类构造函数。
+    2. 子类继承父类原型链 ：
+
+        1. 将父类构造函数的实例赋值给子类构造函数的原型，或ES6`Son.prototype = Object.create(Father.prototype)`
+        2. 使用ES6的`class-extends`则自动实现
 2. 继承方式
 
-    1. **寄生组合式继承**（最理想方式）
+    1. ES6：`class-extends`
 
-        通过借用构造函数来继承**属性**（在子类构造函数体内调用父类构造函数）；通过原型链的混成形式来继承**方法**。
+        **能够继承原生构造函数**：先新建父类的实例对象`this`，然后再用子类的构造函数修饰`this`，使得父类的所有行为都可以继承。
+    
+        ```javascript
+        class Father {
+          constructor (...args) {   // 可省略
+            // this.
+          }
+
+           父类方法 () {}
+        }
+        
+        class Son extends Father {
+          constructor (...args) {   // 可省略
+            super(...args)
+            // this.
+          }
+        
+          子类方法 () {}
+        }
+
+
+        /* 使用测试 */
+        Son.prototype.__proto__ === Father.prototype    // true
+        Son.__proto__  === Father                       // true
+
+
+        var instance1 = new Father('父para');
+        var instance2 = new Son('子para1', '子para2');
+        console.log(instance1, instance2);
+        ```
+    2. ES5模拟：寄生组合式继承
+
+        **无法继承原生构造函数**：先新建子类的实例对象`this`，再将父类的属性添加到子类上，导致父类的内部属性无法获取。
 
         ```javascript
         /* 父类定义： */
         function Father(fatherPara) {
-            /* 私有属性用let；静态私有属性用const */
+            // 私有属性用let；静态私有属性用const
 
             /* 父类属性 */
-            this.fatherPrimitive = fatherPara;
-            this.fatherReference = ['father1', 2, [{4: true}, undefined, null]];
+            this.父类属性 = fatherPara;
         }
         
-        /* 父类方法 */
-        Father.prototype.fatherFun = function () {
-            console.log(this.fatherPrimitive, this.fatherReference);
-        };
+        /* 父类原型链 */
+        Father.prototype.父类原型链方法 = function () {};
         
         
         /* 子类定义： */
@@ -2502,26 +2542,32 @@
             Father.call(this, sonPara1);
         
             /* 子类属性 */
-            this.sonPrimitive = sonPara2;
-            this.sonReference = ['son1', 2, [{4: true}, undefined, null]];
+            this.子类属性 = sonPara2;
         }
         
         /* 子类继承父类原型链 */
-        Son.prototype = Object.create(Father.prototype, {constructor: {value: Son}});
+        Son.prototype = new Father();
+        Son.prototype.constructor = Son;
+        // 或ES6：Son.prototype = Object.create(Father.prototype, {constructor: {value: Son}});
+
+        Son.__proto__  = Father;    // 同步class的实现
+
+        /* 子类原型链 */
+        Son.prototype.子类原型链方法 = function () {};
         
-        /* 子类方法 */
-        Son.prototype.sonFun = function () {
-            console.log(this.sonPrimitive, this.sonReference);
-        };
-        
-        
+
         /* 使用测试 */
+        Son.prototype.__proto__ === Father.prototype    // true
+        Son.__proto__  === Father                       // true
+
+
         var instance1 = new Father('父para');
         var instance2 = new Son('子para1', '子para2');
         console.log(instance1, instance2);
         ```
 
-        >“子类继承父类方法”可以改为不使用`Object.create`的方式：
+        ><details>
+        ><summary>“子类继承父类原型链”可改为的不使用<code>Object.create</code>方式</summary>
         >
         >```javascript
         >(function (subType, superType) {
@@ -2536,11 +2582,7 @@
         >    subType.prototype = prototype;
         >}(Son, Father));
         >```
-    2. 原型式继承
-
-        `Object.create`
-
-        >问题：包含引用类似值的属性，始终会共享给原型与所有实例（浅复制）。
+        ></details>
 
 ### 内存机制
 1. JS自动完成内存分配、[回收](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/前端内容/README.md#垃圾回收)。
