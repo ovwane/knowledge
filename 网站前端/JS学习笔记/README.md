@@ -613,7 +613,7 @@
 ### WAP端相关
 1. WAP端点透bug
 
-    >1. PC端没有~~touch~~事件。
+    >1. PC端没有 ~~`touch`~~ 事件。
     >2. WAP端有`touchstart`、`touchmove`、`touchend`、`touchcancel`等`touch`事件。
     >3. Zepto用`touch`一系列事件封装了`tap`事件。
 
@@ -675,7 +675,7 @@
 
         1. 正在播放
 
-            `timeupdate`事件：当媒体的`currentTime`属性改变（拉动进度或播放中）。
+            `timeupdate`事件：当`媒体.currentTime`改变（拉动进度或播放中）。
         2. 开始播放
 
             1. `play`事件：初次播放、暂停后恢复。
@@ -688,11 +688,13 @@
             >因为`loop`属性模式无法触发`ended`事件，又`timeupdate`事件触发时间不确定、无法和`媒体.duration`取等判断成功，故无法在`loop`属性模式中判定。
 
             （非`loop`属性模式下的）`ended`事件（伴随`pause`事件）。
+        
+        - 建议只用`timeupdate`和`ended`事件处理需求。
+        
+        >各机型/浏览器对视频事件、API的处理不同，甚至某些Android机型会要求：只有触发在视频区域内的事件才可执行视频的API。
     2. 自动播放
 
         1. JS代码模拟
-
-            >因为兼容性，故不使用`autoplay`属性模式，用JS代码模拟。
 
             ```html
             <video id="j-video">
@@ -714,7 +716,9 @@
               }
             </script>
             ```
-        2. `autoplay`属性模式
+        2. ~~`autoplay`~~ 属性模式
+        
+            >兼容性差。
     3. 循环播放
 
         1. JS代码模拟
@@ -749,7 +753,7 @@
         
             <summary><del>JS代码模拟</del></summary>
 
-            >因为无法兼容至所有浏览器，故不推荐。
+            >兼容性差。
 
             ```html
             <style>
@@ -841,7 +845,11 @@
                 2. 内联模式（浏览器支持其中一种）：
 
                     1. `webkit-playsinline playsinline`内联模式。
+                    
+                        >针对iOS的UC或QQ浏览器，可以添加[iphone-inline-video](https://github.com/bfred-it/iphone-inline-video)。
                     2. `x5-video-player-type="h5"`在底部的全屏内联模式（同层播放）。
+                    
+                        >[Android的腾讯x5内核APP](https://x5.tencent.com/tbs/guide/video.html)特有。
             2. 无法操作全屏模式
 
                 1. 无法改变全屏播放方向以及控件内容
@@ -1334,6 +1342,8 @@
 ### 自执行匿名函数（拉姆达，λ，lambda）
 立即调用的函数表达式（IIFE，Immediately Invoked Function Expression）。
 
+>ES6拥有了块级作用域之后，不再需要~~自执行匿名函数~~。
+
 1. 写法：
 
     >1. `function`关键字当作一个**函数声明**的开始，函数声明的后面不能跟圆括号；
@@ -1372,7 +1382,13 @@
     >
     >```javascript
     >for (var i = 0; i < 3; i++) {
+    >    // 不用匿名函数
+    >    setTimeout(function () {
+    >        console.log(i);         // 每个结果都是固定的最后一个值（闭包作用）
+    >    }, 0);
+    >}
     >
+    >for (var i = 0; i < 3; i++) {
     >    // 匿名函数
     >    (function (para) {
     >        setTimeout(function () {
@@ -1382,10 +1398,10 @@
     >}
     >
     >for (var i = 0; i < 3; i++) {
-    >
-    >    // 不用匿名函数
+    >    // ES6的块级作用域
+    >    let num = i;
     >    setTimeout(function () {
-    >        console.log(i);         // 每个结果都是固定的最后一个值（闭包作用）
+    >        console.log(num);       // 结果是1 2 3
     >    }, 0);
     >}
     >```
@@ -1425,7 +1441,7 @@
 
         1. CSS、HTML
 
-            >除[样式适配](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/HTML+CSS学习笔记/响应式相关.md#wap端适配总结)外。
+            >除了[样式适配](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/HTML+CSS学习笔记/响应式相关.md#wap端适配总结)之外。
 
             1. 添加厂商前缀（如`-webkit-`）。
             2. 布局有问题的机型额外调试。
@@ -1634,27 +1650,47 @@
 
         >特例：自定义类型返回`'[object Object]'`，`undefined`、`null`返回对应名字。
 
-        1. 自定义类型实例 -> `'[object Object]'`
-        2. `undefined` 或 不填 -> `'[object Undefined]'`
-        3. `null` -> `'[object Null]'`
-        4. Object实例 -> `'[object Object]'`
-        5. Array实例 -> `'[object Array]'`
-        6. Function实例 -> `'[object Function]'`
-        7. Number实例 -> `'[object Number]'`
-        8. String实例 -> `'[object String]'`
-        9. Boolean实例 -> `'[object Boolean]'`
-        10. Date实例 -> `'[object Date]'`
-        11. RegExp实例 -> `'[object RegExp]'`
-        12. Error实例 -> `'[object Error]'`
-        13. Map实例 -> `'[object Map]'`
-        14. Audio实例 -> `'[object HTMLAudioElement]'`
-        15. Image实例 -> `'[object HTMLImageElement]'`
-        16. `window` -> `'[object Window]'`
-        17. `document` -> `'[object HTMLDocument]'`
-        18. `arguments` -> `'[object Arguments]'`
-        19. `Math` -> `'[object Math]'`
-        20. `JSON` -> `'[object JSON]'`
-
+        1. `undefined` 或 不填 -> `'[object Undefined]'`
+        2. `null` -> `'[object Null]'`
+        3. Boolean实例 -> `'[object Boolean]'`
+        4. Number实例 -> `'[object Number]'`
+        5. String实例 -> `'[object String]'`
+        6. Symbol实例 -> `'[object Symbol]'`
+        7. Object实例 -> `'[object Object]'`
+        8. 自定义类型实例 -> `'[object Object]'`
+        9. Array实例 -> `'[object Array]'`
+        10. Function实例 -> `'[object Function]'`
+        11. Date实例 -> `'[object Date]'`
+        12. RegExp实例 -> `'[object RegExp]'`
+        13. <details>
+                
+            <summary>Error类型实例 -> <code>'[object Error]'</code></summary>
+            
+            Error、EvalError、RangeError、ReferenceError、SyntaxError、TypeError、URIError
+            </details>
+        14. Map实例 -> `'[object Map]'`
+        15. Set实例 -> `'[object Set]'`
+        16. WeakMap实例 -> `'[object WeakMap]'`
+        17. WeakSet实例 -> `'[object WeakSet]'`
+        18. Audio实例 -> `'[object HTMLAudioElement]'`
+        19. Image实例 -> `'[object HTMLImageElement]'`
+        20. Promise实例 -> `'[object Promise]'`
+        21. 生成器实例 -> `'[object GeneratorFunction]'`
+        22. `window` -> `'[object Window]'`
+        23. `document` -> `'[object HTMLDocument]'`
+        24. `arguments` -> `'[object Arguments]'`
+        25. `Math` -> `'[object Math]'`
+        26. `JSON` -> `'[object JSON]'`
+        27. `WebAssembly` -> `'[object WebAssembly]'`
+        28. <details>
+        
+            <summary>其他数组实例 -> <code>'[object 构造函数名]'</code></summary>
+            
+            Int8Array、Uint8Array、Uint8ClampedArray、Int16Array、Uint16Array、Int32Array、Uint32Array、Float32Array、Float64Array
+            </details>
+        29. ArrayBuffer实例 -> `'[object ArrayBuffer]'`
+        30. DataView实例 -> `'[object DataView]'`
+        
         ><details>
         ><summary>对于没有声明的变量，直接使用会报<strong>引用不存在变量</strong>的错误，可以用<code>typeof</code>来使代码健壮</summary>
         >
@@ -1875,13 +1911,17 @@
 2. 自定义错误
 
     ```javascript
+    // ES5
     function MyError(message) {
         this.stack = (Error.call(this, message)).stack;
         this.message = message || '默认信息';
         this.name = 'MyError';
     }
-
     MyError.prototype = Object.create(Error.prototype, {constructor: {value: MyError}});
+
+    
+    // ES6的class-extends
+    class MyError extends Error{}
     ```
 3. 手动抛出错误
 
@@ -2363,12 +2403,12 @@
         obj2.func.call(obj4);   // 4|global|global
         ```
         </details>
-6. 参数
+6. <a name="函数-参数"></a>参数
 
     1. 参数变量在函数体内是默认声明的（传递进函数体），所以不能在函数体内用`let`或`const`再次声明同名参数（`var`可以）。
     2. 使用**参数默认值**时的特殊情况：
 
-        1. 参数默认值在每次调用时都重新计算表达式的值（惰性求值），默认值是运行时执行而不是~~定义时执行~~。
+        1. 调用函数时，根据传参为`undefined`或不传，才进行参数默认值的表达式值计算（惰性求值），默认值是运行时执行而不是~~定义时执行~~（若默认值是调用其他函数，则当且仅当传参为`undefined`或不传参时才执行其他函数）。
         2. 调用函数时，所有参数会形成一个单独作用域（context）进行初始化，初始化结束则作用域消失。此作用域中的参数进行类似`let`定义，因此函数不能有同名参数。
 
             ><details>
@@ -2405,6 +2445,11 @@
             >f4()                       // ReferenceError: x is not defined
             >```
             >></details>
+        3. 不能~~在参数默认值中调用函数体内的方法~~（参数默认值总是被首先执行，而函数体内的函数声明之后生效）。
+    3. 建议参数都用对象形式传递，且形参设置为解构赋值+默认参数。
+    
+        >e.g. `function func ({ para1 = 'default', para2 } = {}) {}`
+    4. 参数的数量有限制，比如有些JS引擎限制在2^16。
 
 ### 闭包（closure）
 1. 当函数体内定义了其他函数时，就创建了闭包。内部函数总是可以访问其所在的外部函数中声明的内容（链式作用域），即使外部函数执行完毕（寿命终结）之后。
@@ -2630,8 +2675,8 @@
 
             1. 浅复制：
                 
-                1. `arr = [...arr]`
-                2. `[...arr] = arr`
+                1. `arr = [...arr]`（ES6的展开元素）
+                2. `[...arr] = arr`（ES6的解构赋值的剩余参数）
                 3. `arr = arr.slice()`
                 4. `arr = arr.concat()`
                 5. 一层[循环遍历](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/JS学习笔记/README.md#循环遍历)赋值

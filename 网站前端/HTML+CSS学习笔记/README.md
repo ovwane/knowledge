@@ -272,7 +272,7 @@
 1. W3C定义：在CSS中，两个或多个毗邻（父子元素或兄弟元素）的普通流中的块元素垂直方向上的margin会发生叠加。这种方式形成的外边距即可称为外边距叠加（collapsed margin）。
 
     1. 毗邻：是指没有被**非空内容**、**padding**、**border**或**clear**分隔开。
-    2. 普通流：除`float: left/right`、`positon: absolute/fixed`外的内容。
+    2. 普通流：除了`float: left/right`、`positon: absolute/fixed`之外的内容。
 2. 产生独立的BFC结构可避免margin合并
 
 >ie6、7触发[haslayout](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/兼容至ie6/README.md#haslayout)会影响margin合并的发生。
@@ -1351,7 +1351,7 @@
     >可以设置为IDEs的**Reformat Code**的排版样式。
 6. CSS注释方式
 
-    除了普通注释外，还可以把注释内容放在根元素的伪元素中：
+    除了普通注释之外，还可以把注释内容放在根元素的伪元素中：
 
     ```css
     :root:before {
