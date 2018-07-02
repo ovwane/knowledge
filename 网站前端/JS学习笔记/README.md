@@ -1451,11 +1451,14 @@
             兼容性判断（能力检测等）。
     2. 与Native配合方式：
 
-        >1. 都是以**字符串**的形式交互。
+        >1. 都是以**字符串**（数据用JSON字符串）的形式交互，向客户端传递：
+        >
+        >    1. 全局的方法名->客户端调用`方法名(JSON数据)`
+        >    2. 匿名函数->客户端调用`(匿名函数(JSON数据))`
         >2. iOS、Android的WebView无法判断是否安装了其他App。
         >3. 可以通过`查看注入的全局方法`或`客户端调用回调函数`来判定H5页面是否在具体App内打开。
 
-        1. 桥协议：Native注入全局方法至WebView的`window`，前端调用则触发Native行为。
+        1. 桥协议：Native注入全局方法至WebView的`window`，前端调用则客户端拦截后触发Native行为。
 
             >1. 客户端注入方式：JS伪协议方式`javascript: 代码`。
             >2. 注入JS代码可以在创建WebView之前（native code）或之后（全局变量JS注入）。
@@ -1510,8 +1513,7 @@
             >需要HTTPS域名配置、iOS设置等其他端配合。
 
             >参考：[通用链接（Universal Links）的使用详解](http://www.hangge.com/blog/cache/detail_1554.html)、[Universal Link 前端部署采坑记](http://awhisper.github.io/2017/09/02/universallink/)、[Support Universal Links](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12-SW2)。
-
-        - 提供Native调用的全局回调函数。
+        4. 前端提供Native调用的全局回调函数（或匿名函数）。
 
             >判断多个回调函数顺序：带id触发Native行为，Native调用回调函数时携带之前的id。
     3. 根据前端的[错误处理机制](https://github.com/realgeoffrey/knowledge/blob/master/网站前端/JS学习笔记/README.md#错误处理机制)统计用户在Hybrid遇到的bug。
@@ -1684,7 +1686,7 @@
         27. `WebAssembly` -> `'[object WebAssembly]'`
         28. <details>
         
-            <summary>其他数组实例 -> <code>'[object 构造函数名]'</code></summary>
+            <summary>TypedArray实例 -> <code>'[object 构造函数名]'</code></summary>
             
             Int8Array、Uint8Array、Uint8ClampedArray、Int16Array、Uint16Array、Int32Array、Uint32Array、Float32Array、Float64Array
             </details>
@@ -2109,7 +2111,7 @@
         
         ```javascript
         /* i为迭代对象的属性值 */
-        for (var i of 可迭代对象) {
+        for (let i of 可迭代对象) {
 
         }
         ```
@@ -2481,7 +2483,7 @@
         >每个引用数据类型都显式或隐式由某个构造函数创建。
     4. 不断向上的`[[Prototype]]`属性，构成了原型链。
 
-        >访问一个引用类型的属性：若这个属性在对象自身中不存在，则向上查找其`[[Prototype]]`指向的对象；若依然找不到，则继续向上查找（其`[[Prototype]]`指向的对象的）`[[Prototype]]`指向的对象，直到原型终点。
+        >访问一个引用数据类型的属性：若这个属性在对象自身中不存在，则向上查找其`[[Prototype]]`指向的对象；若依然找不到，则继续向上查找（其`[[Prototype]]`指向的对象的）`[[Prototype]]`指向的对象，直到原型终点。
         
         原型链终点是`null`，倒数第二是`Object.prototype`。
 
