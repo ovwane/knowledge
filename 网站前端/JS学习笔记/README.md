@@ -1938,13 +1938,13 @@
 
     1. `try-catch-finally`
 
-        >`try`内的作用域不为内部异步操作保留：`try {setTimeout(function () {err}, 0)} catch (e) {}`，`catch`不会捕获异步操作中的错误。
-
         1. 必须`try-catch`或`try-finally`或`try-catch-finally`同时出现。
         2. 如果有`catch`，一旦`try`中抛出错误以后就先执行`catch`中的代码，然后执行`finally`中的代码。
         3. 如果没有`catch`，`try`中的代码抛出错误后，先执行`finally`中的语句，然后将`try`中抛出的错误往上抛。
         4. 如果`try`中代码是以`return`、`continue`或`break`终止的，必须先执行完`finally`中的语句后再执行相应的`try`中的返回语句。
         5. 在`catch`中接收的错误，不会再向上提交给浏览器。
+
+        >`try`内的作用域不为内部异步操作保留：`try {setTimeout(() => {错误语法}, 0)} catch (e) {}`不会捕获异步操作中的错误（同理，在`Promise`或`async-await`等语法中的异步错误也无法被捕获）。可以在异步回调内部再包一层`try-catch`。
     2. `window.onerror`
 
         >jQuery不建议`on`等方式绑定`window`的`error`事件，只通过`window.onerror`定义。
@@ -2975,7 +2975,7 @@
                 2. `async-await`（只有`await`才是异步）
                 3. `Promise`（`Promise.then/catch/all/race`）
 
-                    >`new Promise`和`Prmise.resolve/reject`都是直接执行的同步任务。
+                    >`new Promise(回调)`的回调和`Prmise.resolve()/reject()`都是直接执行的同步任务。
                 4. `MutationObserver`
             >- macrotask和microtast选择
             >
