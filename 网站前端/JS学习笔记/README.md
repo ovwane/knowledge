@@ -481,7 +481,7 @@
         </details>
     3. IE事件处理程序（冒泡）
 
-        `dom.attachEvent('onclick', funcIe);`（可监听多个，需参数完全对应才能解绑定；无法解绑匿名函数）
+        `dom.attachEvent('onclick', funcIe);`（可监听多个，按绑定顺序的逆序触发；需参数完全对应才能解绑定；无法解绑匿名函数）
         
         <details>
         <summary>移除绑定事件</summary>
@@ -492,7 +492,7 @@
 
         >ie8-不兼容。
 
-        `dom.addEventListener('click', func2, false);`（可监听多个，需参数完全对应才能解绑定；无法解绑匿名函数）
+        `dom.addEventListener('click', func2, false);`（可监听多个，按绑定顺序触发，需参数完全对应才能解绑定；无法解绑匿名函数）
 
         <details>
         <summary>移除绑定事件</summary>
